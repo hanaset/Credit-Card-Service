@@ -24,6 +24,7 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'com.h2database:h2'
@@ -31,6 +32,10 @@ dependencies {
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
+
+    compile group: 'com.google.collections', name: 'google-collections', version: '1.0' // google collect
+    compile group: 'commons-codec', name: 'commons-codec', version: '1.14'
+    implementation 'junit:junit:4.12'// AES256 사용을 위한 아파치 라이브러리
 }
 
 test {

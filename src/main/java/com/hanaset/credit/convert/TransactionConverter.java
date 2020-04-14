@@ -1,5 +1,6 @@
 package com.hanaset.credit.convert;
 
+import com.hanaset.credit.model.CardInfo;
 import com.hanaset.credit.model.TransactionData;
 import com.hanaset.credit.model.constants.DataLength;
 
@@ -9,14 +10,14 @@ public class TransactionConverter {
 
         // 처음 데이터 길이의 경우 마지막에 알 수 있음.
         String data = stringToData(transactionData.getFunction(), DataLength.DATA_FUNCTION)
-                + stringToData(transactionData.getAdminNumber(), DataLength.ADMIN_NUMBER)
-                + stringToData(transactionData.getCardNumber(), DataLength.CARD_NUMBER)
+                + stringToData(transactionData.getId(), DataLength.ID)
+                + stringToData(transactionData.getCardInfo().getCardNumber(), DataLength.CARD_NUMBER)
                 + number0ToData(transactionData.getInstallment(), DataLength.INSTALLMENT)
-                + stringToData(transactionData.getValidDate(), DataLength.VALID_DATE)
-                + numberLToData(transactionData.getCvc(), DataLength.CVC)
+                + stringToData(transactionData.getCardInfo().getValidDate(), DataLength.VALID_DATE)
+                + stringToData(transactionData.getCardInfo().getCvc(), DataLength.CVC)
                 + numberToData(transactionData.getAmount(), DataLength.AMOUNT)
                 + number0ToData(transactionData.getVat(), DataLength.VAT)
-                + stringToData(transactionData.getBeforeAdminNumber(), DataLength.BEFORE_ADMIN_NUMBER)
+                + stringToData(transactionData.getBeforeId(), DataLength.BEFORE_ADMIN_NUMBER)
                 + stringToData(transactionData.getEncrypt(), DataLength.ENCRYPT)
                 + stringToData(transactionData.getEmpty(), DataLength.EMPTY);
 
@@ -34,20 +35,22 @@ public class TransactionConverter {
         transactionData.setFunction(dataToString(data.substring(index, index + DataLength.DATA_FUNCTION)));
         index += DataLength.DATA_FUNCTION;
 
-        transactionData.setAdminNumber(dataToString(data.substring(index, index + DataLength.ADMIN_NUMBER)));
-        index += DataLength.ADMIN_NUMBER;
+        transactionData.setId(dataToString(data.substring(index, index + DataLength.ID)));
+        index += DataLength.ID;
 
-        transactionData.setCardNumber(dataToString(data.substring(index, index + DataLength.CARD_NUMBER)));
+        CardInfo cardInfo = new CardInfo();
+        cardInfo.setCardNumber(dataToString(data.substring(index, index + DataLength.CARD_NUMBER)));
         index += DataLength.CARD_NUMBER;
 
         transactionData.setInstallment(dataToNumber(data.substring(index, index + DataLength.INSTALLMENT)));
         index += DataLength.INSTALLMENT;
 
-        transactionData.setValidDate(dataToString(data.substring(index, index + DataLength.VALID_DATE)));
+        cardInfo.setValidDate(dataToString(data.substring(index, index + DataLength.VALID_DATE)));
         index += DataLength.VALID_DATE;
 
-        transactionData.setCvc(dataToNumber(data.substring(index, index + DataLength.CVC)));
+        cardInfo.setCvc(dataToString(data.substring(index, index + DataLength.CVC)));
         index += DataLength.CVC;
+        transactionData.setCardInfo(cardInfo);
 
         transactionData.setAmount(dataToNumber(data.substring(index, index + DataLength.AMOUNT)));
         index += DataLength.AMOUNT;
@@ -55,7 +58,7 @@ public class TransactionConverter {
         transactionData.setVat(dataToNumber(data.substring(index, index + DataLength.VAT)));
         index += DataLength.VAT;
 
-        transactionData.setBeforeAdminNumber(dataToString(data.substring(index, index + DataLength.BEFORE_ADMIN_NUMBER)));
+        transactionData.setBeforeId(dataToString(data.substring(index, index + DataLength.BEFORE_ADMIN_NUMBER)));
         index += DataLength.BEFORE_ADMIN_NUMBER;
 
         transactionData.setEncrypt(dataToString(data.substring(index, index + DataLength.ENCRYPT)));

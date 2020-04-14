@@ -15,19 +15,13 @@ public class TransactionData {
     private String function;
 
     // 관리번호
-    private String adminNumber;
+    private String id;
 
-    // 카드번호
-    private String cardNumber;
+    // 카드 정보 (카드번호, 유효날짜, cvc)
+    private CardInfo cardInfo;
 
     // 할부
     private Integer installment;
-
-    // 카드 유효시간
-    private String validDate;
-
-    // 카드 cvc 번호
-    private Integer cvc;
 
     // 결제/취소 금액
     private Integer amount;
@@ -36,7 +30,7 @@ public class TransactionData {
     private Integer vat;
 
     // 원거래 관리번호 (결제시 공백)
-    private String beforeAdminNumber;
+    private String beforeId;
 
     // 암호화된 카드정보(카드번호, 유효기간, cvc)
     private String encrypt;
