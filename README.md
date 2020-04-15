@@ -88,7 +88,7 @@ DB에 저장된 데이터를 조회해서 응답값을 만들어줍니다.
      
 ---
    
-###개발 환경
+### 개발 환경
 ```
 Spring boot 2.2.6
 Gradle 6.3
@@ -96,7 +96,7 @@ Java 8
 H2 (mem)
 ```
 
-###DB 테이블
+### DB 테이블
 ```
 테이블 명 : transaction_history 
 - ID : varchar(20), pk      // 관리 번호
