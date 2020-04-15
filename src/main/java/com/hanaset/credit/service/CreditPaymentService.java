@@ -40,6 +40,8 @@ public class CreditPaymentService {
             throw new CreditException(HttpStatus.BAD_REQUEST, ErrorCode.ALREADY_CARD_PROCESS, "이미 거래요청 중인 카드 번호입니다. 잠시후 다시 시도해주세요.");
         }
 
+        validateRequest(request);
+
         CardInfo cardInfo = CardInfo.builder()
                 .cardNumber(request.getCardNumber())
                 .validDate(request.getValidDate())
@@ -81,6 +83,13 @@ public class CreditPaymentService {
         CreditCache.cardNumberSetRemove(request.getCardNumber());
 
         return response;
+    }
+
+    private void validateRequest(PaymentRequest request) {
+
+        if(Integer.parseInt(request.getValidDate().substring(0, 2)) > 12) {
+            throw new CreditException(HttpStatus.BAD_REQUEST, ErrorCode.REQUEST_ERROR, "유효하지 않은 날짜입니다.");
+        }
     }
 
 }
