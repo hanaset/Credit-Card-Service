@@ -27,18 +27,18 @@ public class CreditApiRest extends CreditApiRestSupport {
         this.creditCancelService = creditCancelService;
     }
 
-    @PostMapping("/payment")
+    @PostMapping(value = "/payment", produces = "application/json;charset=utf-8")
     public ResponseEntity paymentRequest(@RequestBody @Valid PaymentRequest request) {
-        return response(creditPaymentService.paymentRequest(request));
+        return ResponseEntity.ok(creditPaymentService.paymentRequest(request));
     }
 
-    @DeleteMapping("/cancel")
+    @DeleteMapping(value = "/cancel", produces = "application/json;charset=utf-8")
     public ResponseEntity cancelRequest(@RequestBody @Valid CancelRequest request) {
-        return response(creditCancelService.cancelRequest(request));
+        return ResponseEntity.ok(creditCancelService.cancelRequest(request));
     }
 
-    @GetMapping("/search")
+    @GetMapping(value = "/search", produces = "application/json;charset=utf-8")
     public ResponseEntity search(@RequestParam String id) {
-        return response(creditSearchService.search(id));
+        return ResponseEntity.ok(creditSearchService.search(id));
     }
 }

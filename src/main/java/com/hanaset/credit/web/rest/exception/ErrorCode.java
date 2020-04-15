@@ -9,4 +9,5 @@ public class ErrorCode {
     public static String OVER_CANCEL_REQUEST_AMOUNT = "__OVER_CANCEL_REQUEST_AMOUNT__";
     public static String OVER_CANCEL_REQUEST_VAT = "__OVER_CANCEL_REQUEST_VAT__";
     public static String ALREADY_CARD_PROCESS = "__ALREADY_CARD_PROCESS__";
+    public static String VAT_IS_BIGGER = "__VAT_IS_BIGGER__";
 }

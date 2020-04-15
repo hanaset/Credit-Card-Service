@@ -14,7 +14,6 @@ import javax.validation.constraints.NotNull;
 @Data
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
 public class CancelRequest {
 
     @NotBlank
@@ -27,4 +26,8 @@ public class CancelRequest {
     private Integer amount;
 
     private Integer vat;
+
+    public CancelRequest() {
+        this.vat = 0;
+    }
 }

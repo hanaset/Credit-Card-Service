@@ -1,14 +1,16 @@
 package com.hanaset.credit.web.rest.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.*;
 
+@Builder
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class PaymentRequest {
 
     @NotBlank(message = "카드 번호를 입력해주세요.")

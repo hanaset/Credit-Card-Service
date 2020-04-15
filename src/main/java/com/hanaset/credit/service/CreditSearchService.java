@@ -11,6 +11,7 @@ import com.hanaset.credit.web.rest.exception.CreditException;
 import com.hanaset.credit.web.rest.exception.ErrorCode;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CreditSearchService {
@@ -24,6 +25,7 @@ public class CreditSearchService {
         this.cardInfoHelper = cardInfoHelper;
     }
 
+    @Transactional(readOnly = true)
     public SearchResponse search(String id) {
 
         if(id.length() > 20) {

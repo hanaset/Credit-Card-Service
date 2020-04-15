@@ -1,9 +1,10 @@
 package com.hanaset.credit.service;
 
-import com.hanaset.credit.cache.CardNumberCache;
+import com.hanaset.credit.cache.CreditCache;
 import com.hanaset.credit.convert.TransactionConverter;
 import com.hanaset.credit.entity.TransactionHistoryEntity;
 import com.hanaset.credit.model.CardInfo;
+import com.hanaset.credit.utils.VatUtil;
 import com.hanaset.credit.web.rest.model.PaymentRequest;
 import com.hanaset.credit.web.rest.model.CreditResponse;
 import com.hanaset.credit.model.TransactionData;
@@ -13,11 +14,13 @@ import com.hanaset.credit.utils.CardInfoHelper;
 import com.hanaset.credit.utils.UuidGenerator;
 import com.hanaset.credit.web.rest.exception.CreditException;
 import com.hanaset.credit.web.rest.exception.ErrorCode;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
 
+@Slf4j
 @Service
 public class CreditPaymentService {
 
@@ -33,10 +36,9 @@ public class CreditPaymentService {
     public CreditResponse paymentRequest(PaymentRequest request) {
 
         // 이미 처리중인지 확인
-        if(CardNumberCache.cardNumberSet.contains(request.getCardNumber())) {
+        if(CreditCache.cardNumberContainsAndSet(request.getCardNumber())) {
             throw new CreditException(HttpStatus.BAD_REQUEST, ErrorCode.ALREADY_CARD_PROCESS, "이미 거래요청 중인 카드 번호입니다. 잠시후 다시 시도해주세요.");
         }
-        CardNumberCache.cardNumberSet.add(request.getCardNumber());
 
         CardInfo cardInfo = CardInfo.builder()
                 .cardNumber(request.getCardNumber())
@@ -50,7 +52,7 @@ public class CreditPaymentService {
                 .installment(request.getInstallment())
                 .cardInfo(cardInfo)
                 .amount(request.getAmount())
-                .vat(calVat(request.getAmount(), request.getVat()))
+                .vat(VatUtil.calVat(request.getAmount(), request.getVat()))
                 .beforeId("")
                 .encrypt(cardInfoHelper.encrypt(cardInfo))
                 .empty("")
@@ -72,27 +74,13 @@ public class CreditPaymentService {
                 .completedDtime(transactionHistoryEntity.getCompletedDtime())
                 .build();
 
+        log.info("결제 완료 금액 : {}", response.getAmount());
+        log.info("결제 완료 부가가치세: {}", response.getVat());
+
         //처리 완료 후 캐싱에서 제거
-        CardNumberCache.cardNumberSet.remove(request.getCardNumber());
+        CreditCache.cardNumberSetRemove(request.getCardNumber());
 
         return response;
-    }
-
-    private Integer calVat(Integer amount, Integer vat) {
-
-        if(vat == null) {
-
-            Double result = amount.doubleValue() / 11;
-            return Long.valueOf(Math.round(result)).intValue();
-
-        } else {
-
-            if (vat.compareTo(amount) == 1) {
-                throw new CreditException(HttpStatus.BAD_REQUEST, ErrorCode.REQUEST_ERROR, "부가가치세가 결제금액보다 클 수 없습니다.");
-            }
-
-            return vat;
-        }
     }
 
 }

@@ -23,6 +23,7 @@ public class CardInfoHelperTest {
                 .build();
 
         String enc = cardInfoHelper.encrypt(cardInfo);
+
         CardInfo result = cardInfoHelper.decrypt(enc);
 
         assertEquals(cardInfo.getCardNumber(), result.getCardNumber());

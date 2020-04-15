@@ -6,16 +6,7 @@ import org.springframework.http.ResponseEntity;
 
 public abstract class CreditApiRestSupport {
 
-    protected static <T> ResponseEntity<?> response(T data) {
-        return ResponseEntity.ok(
-                ImmutableMap.of(
-                        "code", "0",
-                        "data", data
-                )
-        );
-    }
-
-    protected static <T> ResponseEntity<?> exception(String code, String msg, HttpStatus httpStatus) {
+    protected static ResponseEntity<?> exception(String code, String msg, HttpStatus httpStatus) {
         return new ResponseEntity<>(
                 ImmutableMap.of(
                         "code", code,
