@@ -24,7 +24,7 @@ public class CardInfoHelper {
         try {
             return aes256Util.encrypt(data);
         } catch (Exception e) {
-            throw new CreditException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.INTERNAL_SERVER_ERROR, "카드정보 암호화 과정에서 에러 발생!!");
+            throw new CreditException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.CRYPTO_ERROR, "카드정보 암호화 과정에서 에러 발생!!");
         }
     }
 
@@ -40,7 +40,7 @@ public class CardInfoHelper {
                     .build();
 
         } catch (Exception e) {
-            throw new CreditException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.INTERNAL_SERVER_ERROR, "카드정보 복호화 과정에서 에러 발생!!");
+            throw new CreditException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.CRYPTO_ERROR, "카드정보 복호화 과정에서 에러 발생!!");
         }
     }
 }

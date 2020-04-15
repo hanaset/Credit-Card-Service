@@ -3,6 +3,8 @@ package com.hanaset.credit.service;
 import com.hanaset.credit.convert.TransactionConverter;
 import com.hanaset.credit.entity.TransactionHistoryEntity;
 import com.hanaset.credit.model.AmountInfo;
+import com.hanaset.credit.model.CardInfo;
+import com.hanaset.credit.utils.MaskingUtil;
 import com.hanaset.credit.web.rest.model.SearchResponse;
 import com.hanaset.credit.model.TransactionData;
 import com.hanaset.credit.repository.TransactionHistoryRepository;
@@ -33,17 +35,18 @@ public class CreditSearchService {
         }
 
         TransactionHistoryEntity transactionHistoryEntity = transactionHistoryRepository.findById(id)
-                .orElseThrow(() -> new CreditException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "데이터를 찾을수 없습니다."));
+                .orElseThrow(() -> new CreditException(HttpStatus.NOT_FOUND, ErrorCode.NOT_EXIST_ID, "데이터를 찾을수 없습니다."));
 
         TransactionData transactionData = TransactionConverter.DataToTransaction(transactionHistoryEntity.getData());
-
+        CardInfo cardInfo = cardInfoHelper.decrypt(transactionData.getEncrypt());
+        cardInfo.setCardNumber(MaskingUtil.cardNumberMask(cardInfo.getCardNumber()));
         SearchResponse response = SearchResponse.builder()
                 .id(transactionData.getId())
                 .amountInfo(AmountInfo.builder()
                         .amount(transactionData.getAmount())
                         .vat(transactionData.getVat())
                         .build())
-                .cardInfo(cardInfoHelper.decrypt(transactionData.getEncrypt()))
+                .cardInfo(cardInfo)
                 .function(transactionData.getFunction())
                 .completedDtime(transactionHistoryEntity.getCompletedDtime())
                 .build();
